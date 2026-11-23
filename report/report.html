@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Freight Rate Prediction Report</title>
+<style>
+@page { size: A4; margin: 17mm; }
+body { font: 10.5pt/1.42 Helvetica, Arial, sans-serif; color: #1d2b2f; }
+h1 { font-size: 21pt; margin: 0 0 2pt; color: #064a56; }
+h2 { font-size: 13pt; margin: 13pt 0 4pt; color: #064a56; break-after: avoid; }
+p, li { margin: 4pt 0; }
+ul { margin: 4pt 0; padding-left: 18pt; }
+table { border-collapse: collapse; width: 100%; margin: 7pt 0; font-size: 9.5pt; }
+th, td { border-bottom: 1px solid #cfdadd; padding: 3.5pt 5pt; text-align: left; }
+th:not(:first-child), td:not(:first-child) { text-align: right; }
+.selected { font-weight: bold; background: #eaf1f2; }
+.byline { color: #455a60; }
+table, figure { break-inside: avoid; }
+figure { margin: 7pt 0; }
+img { width: 100%; }
+</style>
+</head>
+<body>
+<h1>Freight Rate Prediction</h1>
+<p class="byline">Ogbekile Chukwudi Samuel | Machine Learning Engineer assessment<br>
+github.com/ogbeks/spotter-freight-rate-prediction</p>
+
+<p><b>The selected model has an average mean absolute error (MAE) of $125.83 across three later test periods, 19.0% lower than ridge regression.</b> Its errors across the periods range from $119.07 to $136.31, the smallest worst case of the models tested.</p>
+
+<h2>Validation and data split</h2>
+<p>The labeled data covers January through October 2025 and the final predictions are for November and December. I therefore tested on later months instead of a random sample. Each test trains on every earlier month:</p>
+<table>
+<tr><th>Test period</th><th>Training period</th><th>Training loads</th><th>Test loads</th></tr>
+<tr><td>May to June</td><td>January to April</td><td>19,110</td><td>9,696</td></tr>
+<tr><td>July to August</td><td>January to June</td><td>28,806</td><td>9,671</td></tr>
+<tr><td>September to October</td><td>January to August</td><td>38,477</td><td>9,523</td></tr>
+</table>
+<p>The split matters. On 9,523 loads picked at random from January to October, the boosted model with market index had a lower MAE than the one without it: $107.24 compared with $120.35. When trained on January to August and tested on September and October, it was much worse: $168.95 compared with $104.01.</p>
+<p>My reference was gradient boosting without market index. I kept it unless another boosted option had both a lower average MAE and a lower worst-period MAE, then took the lowest average. I set this rule before testing the six boosted options together.</p>
+
+<h2>Data findings and cleaning</h2>
+<ul>
+<li><b>Quote signal is not safe to use.</b> Its rank correlation with rate per mile is about 0.96 or stronger in nine of ten months, but the sign is positive in five and negative in four. In August it is near zero. I cannot know its direction in November and December, so I excluded it.</li>
+<li><b>Market index shifts against price.</b> Its monthly average was 0.93 to 1.00 in January and February and 0.89 to 0.96 in September and October, but median rate per mile rose from $2.03&ndash;$2.06 to $2.16.</li>
+<li><b>Distance and equipment matter.</b> Distance has a 0.91 correlation with posted rate. Median rate per mile is $2.05 for Dry Van, $2.22 for Flatbed and $2.31 for Reefer.</li>
+<li><b>Weights need cleaning.</b> Weight is missing in 300 training loads and nonpositive in 292. I treated both as missing. It is also missing in 165 validation loads. Market index is missing in 374 training and 249 validation loads, and the boosted models handle missing values.</li>
+<li><b>Eight validation cities do not appear in training,</b> affecting 1,447 loads. City coordinates give the model usable location information.</li>
+<li><b>49 training loads exceed $10 per mile.</b> I kept extreme rates, so the reported errors include them.</li>
+</ul>
+
+<h2>Features and model comparison</h2>
+<p>All models except ridge use cities, city coordinates, equipment, distance, the square root of distance, distance by equipment, weight and weekday. Some boosted models add market index times distance, day of year, or both. All boosted models use the same settings and absolute-error loss, which limits the influence of extreme rates. MAE is in US dollars.</p>
+<table>
+<tr><th>Model</th><th>May&ndash;Jun</th><th>Jul&ndash;Aug</th><th>Sep&ndash;Oct</th><th>Average</th><th>Worst</th></tr>
+<tr><td>Ridge regression (baseline)</td><td>188.91</td><td>139.10</td><td>138.25</td><td>155.42</td><td>188.91</td></tr>
+<tr><td>Huber regression</td><td>199.10</td><td>112.38</td><td>109.69</td><td>140.39</td><td>199.10</td></tr>
+<tr><td>Boosted (reference)</td><td>199.78</td><td>109.43</td><td>104.01</td><td>137.74</td><td>199.78</td></tr>
+<tr><td>Boosted, market index</td><td>123.50</td><td>107.07</td><td>168.95</td><td>133.17</td><td>168.95</td></tr>
+<tr><td>Boosted, blend of the two above</td><td>154.29</td><td>98.38</td><td>126.37</td><td>126.35</td><td>154.29</td></tr>
+<tr><td>Boosted, day of year</td><td>123.52</td><td>187.79</td><td>109.36</td><td>140.22</td><td>187.79</td></tr>
+<tr class="selected"><td>Boosted, market index and day of year</td><td>122.11</td><td>136.31</td><td>119.07</td><td>125.83</td><td>136.31</td></tr>
+<tr><td>Boosted, latest three months only</td><td>174.60</td><td>121.65</td><td>111.20</td><td>135.82</td><td>174.60</td></tr>
+</table>
+<p>I used the market index and day of year model for the 12,000 validation loads, refit on all 48,000 labeled loads. The December chart inputs have no market index, so I used the qualifying model without it, trained on the latest three months (August to October).</p>
+
+<h2>December prediction chart</h2>
+<figure><img src="candidate_december.png" alt="Line chart of predicted rates for each day of December 2025"></figure>
+<p>Only the date changes across these 31 predictions, which range from $822.64 on Sundays to $834.92 on Thursdays. Weekday is this model's only date feature, so the pattern repeats weekly and December 25 is priced as a normal Thursday.</p>
+
+<h2>Limitations</h2>
+<ul>
+<li>The selected model beats the reference on average and in the worst period, but not in July to August or September to October. Its advantage comes from May to June, when the model had the least training data.</li>
+<li>Three test periods are a small sample and were used to select the model, so the average may be slightly optimistic.</li>
+<li>Neither model estimates holiday effects. The labeled data has no November or December loads.</li>
+</ul>
+
+<h2>Reproducibility</h2>
+<p>I reran the pipeline in a fresh clone with the pinned dependencies and reproduced the committed predictions exactly. The supplied checker passed all 12,000 validation predictions and 31 December predictions.</p>
+</body>
+</html>
