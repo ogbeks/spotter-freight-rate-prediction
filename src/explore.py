@@ -35,3 +35,12 @@ print(per_mile.groupby(train.equipment).median().round(2))
 print("\nCorrelation with posted rate")
 columns = ["distance", "weight", "market_index", "quote_signal"]
 print(train[columns].corrwith(train.posted_rate).round(3))
+
+month = train.date.str[:7]
+columns = ["market_index", "quote_signal"]
+monthly = {
+    m: {c: train.loc[month == m, c].rank().corr(per_mile[month == m].rank()) for c in columns}
+    for m in sorted(month.unique())
+}
+print("\nMonthly rank correlation with rate per mile")
+print(pd.DataFrame(monthly).T.round(3))

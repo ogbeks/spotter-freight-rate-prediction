@@ -1,94 +1,174 @@
 {
-  "cutoff": "2025-09-01",
-  "fit_rows": 38477,
-  "holdout_rows": 9523,
-  "freight_model": "boosted_shared",
-  "chart_model": "boosted_shared",
+  "freight_model": "boosted_market_day",
+  "chart_model": "boosted_shared_3mo",
   "models": {
     "ridge_baseline": {
-      "mae_usd": 138.25,
-      "rmse_usd": 635.88,
-      "r2": 0.8264,
-      "by_month": {
-        "2025-09": {
-          "mae_usd": 138.04,
-          "rmse_usd": 619.67,
-          "r2": 0.8345
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 188.91,
+          "rmse_usd": 658.44,
+          "r2": 0.8189
         },
-        "2025-10": {
-          "mae_usd": 138.45,
-          "rmse_usd": 651.09,
-          "r2": 0.8186
+        "2025-07 to 2025-08": {
+          "mae_usd": 139.1,
+          "rmse_usd": 626.3,
+          "r2": 0.8235
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 138.25,
+          "rmse_usd": 635.88,
+          "r2": 0.8264
         }
-      }
+      },
+      "average_mae": 155.42,
+      "worst_mae": 188.91
     },
     "huber_shared": {
-      "mae_usd": 109.69,
-      "rmse_usd": 633.5,
-      "r2": 0.8277,
-      "by_month": {
-        "2025-09": {
-          "mae_usd": 106.74,
-          "rmse_usd": 616.86,
-          "r2": 0.836
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 199.1,
+          "rmse_usd": 662.6,
+          "r2": 0.8166
         },
-        "2025-10": {
-          "mae_usd": 112.54,
-          "rmse_usd": 649.11,
-          "r2": 0.8197
-        }
-      }
-    },
-    "huber_market": {
-      "mae_usd": 166.75,
-      "rmse_usd": 652.19,
-      "r2": 0.8174,
-      "by_month": {
-        "2025-09": {
-          "mae_usd": 173.21,
-          "rmse_usd": 640.13,
-          "r2": 0.8234
+        "2025-07 to 2025-08": {
+          "mae_usd": 112.38,
+          "rmse_usd": 625.7,
+          "r2": 0.8238
         },
-        "2025-10": {
-          "mae_usd": 160.52,
-          "rmse_usd": 663.58,
-          "r2": 0.8115
+        "2025-09 to 2025-10": {
+          "mae_usd": 109.69,
+          "rmse_usd": 633.5,
+          "r2": 0.8277
         }
-      }
+      },
+      "average_mae": 140.39,
+      "worst_mae": 199.1
     },
     "boosted_shared": {
-      "mae_usd": 104.01,
-      "rmse_usd": 631.91,
-      "r2": 0.8285,
-      "by_month": {
-        "2025-09": {
-          "mae_usd": 101.86,
-          "rmse_usd": 613.93,
-          "r2": 0.8376
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 199.78,
+          "rmse_usd": 663.05,
+          "r2": 0.8163
         },
-        "2025-10": {
-          "mae_usd": 106.08,
-          "rmse_usd": 648.73,
-          "r2": 0.8199
+        "2025-07 to 2025-08": {
+          "mae_usd": 109.43,
+          "rmse_usd": 624.3,
+          "r2": 0.8246
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 104.01,
+          "rmse_usd": 631.91,
+          "r2": 0.8285
         }
-      }
+      },
+      "average_mae": 137.74,
+      "worst_mae": 199.78
     },
     "boosted_market": {
-      "mae_usd": 168.95,
-      "rmse_usd": 652.5,
-      "r2": 0.8172,
-      "by_month": {
-        "2025-09": {
-          "mae_usd": 179.28,
-          "rmse_usd": 641.5,
-          "r2": 0.8227
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 123.5,
+          "rmse_usd": 638.6,
+          "r2": 0.8296
         },
-        "2025-10": {
-          "mae_usd": 159.0,
-          "rmse_usd": 662.91,
-          "r2": 0.8119
+        "2025-07 to 2025-08": {
+          "mae_usd": 107.07,
+          "rmse_usd": 625.56,
+          "r2": 0.8239
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 168.95,
+          "rmse_usd": 652.5,
+          "r2": 0.8172
         }
-      }
+      },
+      "average_mae": 133.17,
+      "worst_mae": 168.95
+    },
+    "boosted_blend": {
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 154.29,
+          "rmse_usd": 647.8,
+          "r2": 0.8247
+        },
+        "2025-07 to 2025-08": {
+          "mae_usd": 98.38,
+          "rmse_usd": 623.24,
+          "r2": 0.8252
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 126.37,
+          "rmse_usd": 639.11,
+          "r2": 0.8246
+        }
+      },
+      "average_mae": 126.35,
+      "worst_mae": 154.29
+    },
+    "boosted_shared_day": {
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 123.52,
+          "rmse_usd": 638.77,
+          "r2": 0.8295
+        },
+        "2025-07 to 2025-08": {
+          "mae_usd": 187.79,
+          "rmse_usd": 633.58,
+          "r2": 0.8193
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 109.36,
+          "rmse_usd": 633.84,
+          "r2": 0.8275
+        }
+      },
+      "average_mae": 140.22,
+      "worst_mae": 187.79
+    },
+    "boosted_market_day": {
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 122.11,
+          "rmse_usd": 637.81,
+          "r2": 0.83
+        },
+        "2025-07 to 2025-08": {
+          "mae_usd": 136.31,
+          "rmse_usd": 623.08,
+          "r2": 0.8253
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 119.07,
+          "rmse_usd": 636.21,
+          "r2": 0.8262
+        }
+      },
+      "average_mae": 125.83,
+      "worst_mae": 136.31
+    },
+    "boosted_shared_3mo": {
+      "windows": {
+        "2025-05 to 2025-06": {
+          "mae_usd": 174.6,
+          "rmse_usd": 654.55,
+          "r2": 0.821
+        },
+        "2025-07 to 2025-08": {
+          "mae_usd": 121.65,
+          "rmse_usd": 621.97,
+          "r2": 0.8259
+        },
+        "2025-09 to 2025-10": {
+          "mae_usd": 111.2,
+          "rmse_usd": 629.37,
+          "r2": 0.8299
+        }
+      },
+      "average_mae": 135.82,
+      "worst_mae": 174.6
     }
   }
 }
